@@ -1,5 +1,19 @@
+name: CI-CD CoreBank
+on:
+  push:
+    branches: [main]
 jobs:
   build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build da imagem Docker
+        run: docker build -t corebank .
+      - name: Teste do container
+        run: |
+          docker run -d -p 8080:80 corebank
+          sleep 10
+          curl -f http://localhost:8080
 
   deploy-homologacao:
     needs: build
