@@ -29,9 +29,9 @@ jobs:
             set -e
             [ -d corebank ] || git clone https://github.com/Isaque-Matos/corebank.git corebank
             cd corebank && git pull
-            docker build -t corebank .
-            docker rm -f corebank || true
-            docker run -d --name corebank --restart always -p 80:80 corebank
+            /usr/bin/docker build -t corebank .
+            /usr/bin/docker rm -f corebank || true
+            /usr/bin/docker run -d --name corebank --restart always -p 80:80 corebank
 
   deploy-producao:
     needs: deploy-homologacao
@@ -47,6 +47,6 @@ jobs:
             set -e
             [ -d corebank ] || git clone https://github.com/Isaque-Matos/corebank.git corebank
             cd corebank && git pull
-            docker build -t corebank .
-            docker rm -f corebank || true
-            docker run -d --name corebank --restart always -p 80:80 corebank
+            /usr/bin/docker build -t corebank .
+            /usr/bin/docker rm -f corebank || true
+            /usr/bin/docker run -d --name corebank --restart always -p 80:80 corebank
