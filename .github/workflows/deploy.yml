@@ -1,0 +1,32 @@
+name: CI-CD CoreBank
+on:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build da imagem Docker
+        run: docker build -t corebank .
+      - name: Teste do container
+        run: |
+          docker run -d -p 8080:80 corebank
+          sleep 10
+          curl -f http://localhost:8080
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+            [ -d corebank ] || git clone https://github.com/Isaque-Matos/corebank.git corebank
+            cd corebank && git pull
+            docker build -t corebank .
+            docker rm -f corebank || true
+            docker run -d --name corebank --restart always -p 80:80 corebank
