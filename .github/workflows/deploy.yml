@@ -29,7 +29,7 @@ jobs:
             set -e
             [ -d corebank ] || git clone https://github.com/Isaque-Matos/corebank.git corebank
             cd corebank && git pull
-            /usr/bin/docker build -t corebank .
+            /usr/bin/docker build --build-arg AMBIENTE=hml -t corebank .
             /usr/bin/docker rm -f corebank || true
             /usr/bin/docker run -d --name corebank --restart always -p 80:80 corebank
 
@@ -47,6 +47,6 @@ jobs:
             set -e
             [ -d corebank ] || git clone https://github.com/Isaque-Matos/corebank.git corebank
             cd corebank && git pull
-            /usr/bin/docker build -t corebank .
+            /usr/bin/docker build --build-arg AMBIENTE=prd -t corebank .
             /usr/bin/docker rm -f corebank || true
             /usr/bin/docker run -d --name corebank --restart always -p 80:80 corebank
